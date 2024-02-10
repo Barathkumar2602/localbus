@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="move.css">
+	<title>Geolocation</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div id="map" style="float:left;width:70%; height: 100vh"></div>
+  <div id="one" style=" float:right;background-color:black;color:white;width:30%; height:100vh;text-align:center">
+  <h1>TIME</h1>
+  <h2>BUS STAND TO PSNA COLLEGE</h2>
+  <h3>11:00 AM</h3>
+  <h2>NATHAM TO KODAIROAD</h2>
+  <h3>5:00 AM</h3>
+  <h2>CHINNALAPATTI TO BUS STAND</h2>
+  <h3>8:00 PM</h3>
+  <h2>ATHOOR TO BATLAGUNDU</h2>
+  <h3>12:00 AM</h3>
+  <h2>KEERANUR TO PANNAIKADU</h2>
+  <h3>10:00 AM</h3>
+  <h2>ERIODU TO DINDIGUL BUS STAND</h2>
+  <h3>6:00 PM</h3>
+  <h2>KOTHAYAM TO OTTANCHATRAM</h2>
+  <h3>8:30 PM</h3>
+  <h2>BUS STAND TO PSNA COLLEGE</h2>
+  <h3>11:00 AM</h3>
+  
+</div>
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+
+	<script>
+
+		var map = L.map('map').setView([10.3624, 77.9695], 11);
+		mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'Leaflet &copy; ' + mapLink + ', contribution', maxZoom: 18 }).addTo(map);
+
+		var busIcon = L.icon({
+			iconUrl: 'img/bus.png',
+			iconSize: [80, 80]
+		})
+
+		var marker = L.marker([10.3624, 77.9695], { icon: busIcon }).addTo(map);
+
+		map.on('click', function (e) {
+			console.log(e)
+			var newMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+			L.Routing.control({
+				waypoints: [
+					L.latLng(10.4164,77.9006),
+          
+					L.latLng(e.latlng.lat, e.latlng.lng)
+				]
+			}).on('routesfound', function (e) {
+				var routes = e.routes;
+				console.log(routes);
+
+				e.routes[0].coordinates.forEach(function (coord, index) {
+					setTimeout(function () {
+						marker.setLatLng([coord.lat, coord.lng]);
+					}, 50 * index)
+				})
+
+			}).addTo(map);
+		});
+
+
+	</script>
+  
+  <div
+
+
+</body>
+
+</html>
